@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeHome.Console", "TakeHome.Console\TakeHome.Console.csproj", "{A5A52575-9E63-466E-8B63-92D7E7F66EBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeHome.Tests", "TakeHome.Tests\TakeHome.Tests.csproj", "{7A67B851-8544-473E-9739-C197F82D3D0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5A52575-9E63-466E-8B63-92D7E7F66EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5A52575-9E63-466E-8B63-92D7E7F66EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5A52575-9E63-466E-8B63-92D7E7F66EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5A52575-9E63-466E-8B63-92D7E7F66EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A67B851-8544-473E-9739-C197F82D3D0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A67B851-8544-473E-9739-C197F82D3D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A67B851-8544-473E-9739-C197F82D3D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A67B851-8544-473E-9739-C197F82D3D0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C56CE9C3-0C0F-4FE6-83A7-EB22926EEF27}
+	EndGlobalSection
+EndGlobal
