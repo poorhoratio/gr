@@ -5,9 +5,9 @@ namespace TakeHome.Console.Models
 {
 	public record Account
 	{
-		public string Id { get; }
-		public string Name { get; }
-		public string Email { get; }
+		public string Id { get; init; }
+		public string Name { get; init; }
+		public string Email { get; init; }
 	}
 
 	class IdComparer : IEqualityComparer<Account>
@@ -19,7 +19,7 @@ namespace TakeHome.Console.Models
 
 		public int GetHashCode(Account account)
 		{
-			if (Object.ReferenceEquals(account, null)) return 0;
+			if (account is null) return 0;
 
 			return account.Id.GetHashCode();
 		}
