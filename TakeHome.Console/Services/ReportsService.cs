@@ -91,7 +91,7 @@ namespace TakeHome.Console.Services
         {
             var headerRow = "Change,Id,OldName,OldEmail,NewName,NewEmail\n";
             var changes = GetChanges();
-            var filename = Path.Combine(_outputPath, "ChangeReport.csv");
+            var filename = Path.Combine(_outputPath, "MigrationReport.csv");
             _logger.LogInformation($"Creating report: {filename}");
             File.WriteAllText(filename, headerRow);
             File.AppendAllLines(filename, changes.Select(c => c.Csv));
