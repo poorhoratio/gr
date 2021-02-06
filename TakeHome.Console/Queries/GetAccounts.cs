@@ -5,12 +5,6 @@ using TakeHome.Console.Models;
 
 namespace TakeHome.Console.Queries
 {
-    public interface IGetAccounts
-    {
-        IEnumerable<Account> GetAll();
-        Account GetById(string id);
-    }
-
     public class GetAccounts : IGetAccounts
     {
         protected readonly NpgsqlConnection _connection;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,21 +10,29 @@ using TakeHome.Console.Queries;
 
 namespace TakeHome.Console.Services
 {
-    public class ReportsService
+    public class ReportsService : IReportsService
     {
         private readonly IGetAccounts _getOldAccounts;
         private readonly IGetAccounts _getNewAccounts;
+        private readonly ILogger<IReportsService> _logger;
+        private readonly string _outputPath;
 
-        public ReportsService(IGetAccounts getOldAccounts, IGetAccounts getNewAccounts)
+        public ReportsService(IGetAccounts getOldAccounts, IGetAccounts getNewAccounts, string outputPath, ILogger<IReportsService> logger)
         {
             _getOldAccounts = getOldAccounts;
             _getNewAccounts = getNewAccounts;
+            _outputPath = outputPath;
+            _logger = logger;
         }
 
         public List<AccountChange> GetChanges()
         {
-            var oldAccounts = _getOldAccounts.GetAll();
-            var newAccounts = _getNewAccounts.GetAll();
+            _logger.LogInformation("Getting changes");
+            var oldAccounts = _getOldAccounts.GetAll().ToList();
+            _logger.LogInformation($"Old account count: {oldAccounts.Count}");
+
+            var newAccounts = _getNewAccounts.GetAll().ToList();
+            _logger.LogInformation($"New account count: {oldAccounts.Count}");
 
             var oldRecordsMissingInNewList = oldAccounts
                 .Except(newAccounts, new IdComparer())
@@ -33,7 +42,9 @@ namespace TakeHome.Console.Services
                     Id = oa.Id,
                     OldName = oa.Name,
                     OldEmail = oa.Email
-                });
+                })
+                .ToList();
+
             var recordsAddedSinceMigration = newAccounts
                 .Except(oldAccounts, new IdComparer())
                 .Select(na => new AccountChange
@@ -42,7 +53,8 @@ namespace TakeHome.Console.Services
                     Id = na.Id,
                     NewName = na.Name,
                     NewEmail = na.Email
-                });
+                })
+                .ToList();
 
             var oldDictionary = oldAccounts.ToDictionary(a => a.Id, a => a);
             var corruptedAccounts = newAccounts
@@ -59,22 +71,30 @@ namespace TakeHome.Console.Services
                         NewName = na.Name,
                         NewEmail = na.Email
                     };
-                });
+                })
+                .ToList();
 
             var allChanges = oldRecordsMissingInNewList
                 .Concat(recordsAddedSinceMigration)
-                .Concat(corruptedAccounts);
+                .Concat(corruptedAccounts)
+                .ToList();
+
+            _logger.LogInformation($"Old records missing in new list: {oldRecordsMissingInNewList.Count}");
+            _logger.LogInformation($"Records added since migration:   {recordsAddedSinceMigration.Count}");
+            _logger.LogInformation($"Corrupted accounts found:        {corruptedAccounts.Count}");
+            _logger.LogInformation($"Total changes found:             {allChanges.Count}");
 
             return allChanges.ToList();
         }
 
-        public void GenerateReports()
+        public void GenerateMigrationReport()
         {
             var headerRow = "Change,Id,OldName,OldEmail,NewName,NewEmail\n";
             var changes = GetChanges();
-            File.WriteAllText(@"e:\test\gr\changes.csv", headerRow);
-            File.AppendAllLines(@"e:\test\gr\changes.csv", changes.Select(c => c.Csv));
-            File.WriteAllLines(@"e:\test\gr\changes.sql", changes.Where(c => !string.IsNullOrWhiteSpace(c.Sql)).Select(c => c.Sql));
+            var filename = Path.Combine(_outputPath, "ChangeReport.csv");
+            _logger.LogInformation($"Creating report: {filename}");
+            File.WriteAllText(filename, headerRow);
+            File.AppendAllLines(filename, changes.Select(c => c.Csv));
         }
     }
 }

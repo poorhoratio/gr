@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace TakeHome.Tests
     {
         private Mock<IGetAccounts> _mockGetOldAccounts;
         private Mock<IGetAccounts> _mockGetNewAccounts;
+        private Mock<ILogger<IReportsService>> _mockLogger;
         private ReportsService _sut;
 
         [SetUp]
@@ -19,7 +21,8 @@ namespace TakeHome.Tests
         {
             _mockGetOldAccounts = new Mock<IGetAccounts>();
             _mockGetNewAccounts = new Mock<IGetAccounts>();
-            _sut = new ReportsService(_mockGetOldAccounts.Object, _mockGetNewAccounts.Object);
+            _mockLogger = new Mock<ILogger<IReportsService>>();
+            _sut = new ReportsService(_mockGetOldAccounts.Object, _mockGetNewAccounts.Object, "", _mockLogger.Object);
         }
 
         [Test]

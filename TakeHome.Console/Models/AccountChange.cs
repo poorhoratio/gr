@@ -20,28 +20,15 @@
 		{
 			get
 			{
-				var sql = ChangeType switch
+				var csv = ChangeType switch
 				{
 					ChangeType.Corrupted => $"{ChangeType},{Id},{OldName},{OldEmail},{NewName},{NewEmail}",
 					ChangeType.Missing => $"{ChangeType},{Id},{OldName},{OldEmail},,",
 					ChangeType.New => $"{ChangeType},{Id},,,{NewName},{NewEmail}",
 					_ => "",
 				};
-				return sql;
+				return csv;
 			}
-		}
-
-		public string Sql { 
-			get 
-			{
-				var sql = ChangeType switch
-                {
-                    ChangeType.Corrupted => $"UPDATE Accounts SET Name = '{OldName}', Email = '{OldEmail}' WHERE Id = '{Id}';",
-                    ChangeType.Missing => $"INSERT INTO Accounts (Id, Name, Email) VALUES ('{Id}', '{OldName}', '{OldEmail}');",
-                    _ => "",
-                };
-				return sql;
-			} 
 		}
 	}
 }
